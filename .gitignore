@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Entornos virtuales
+venv/
+env/
+.env/
+
+# IDEs
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Base de datos local
+*.sqlite3
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+
+# Pipenv
+Pipfile.lock
+
+# MacOS
+.DS_Store
