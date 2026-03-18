@@ -2,8 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException,Query
 from sqlalchemy.orm import Session
 from app.database import get_db, engine
 
+from sqlalchemy import func
+from app.models import Category, Content, History, content_categories
+
 from app.schemas.category_schema import * 
-from app.models.category_model import *
+
 
 router = APIRouter()
 
@@ -49,3 +52,27 @@ def get_categories(
     categories = query.limit(limit).offset(offset).all()
 
     return categories
+
+
+@router.get("/recommendations/{user_id}")
+def get_recommendations(
+    user_id: int,
+    db: Session = Depends(get_db)
+):
+    result = (
+        db.query(
+            Category.id,
+            Category.name,
+            func.count(Category.id).label("views")
+        )
+        .join(content_categories, Category.id == content_categories.c.category_id)
+        .join(Content, Content.id == content_categories.c.content_id)
+        .join(History, History.content_id == Content.id)
+        .filter(History.user_id == user_id)
+        .group_by(Category.id)
+        .order_by(func.count(Category.id).desc())
+        .limit(5)
+        .all()
+    )
+
+    return result
