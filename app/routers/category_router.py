@@ -3,7 +3,10 @@ from sqlalchemy.orm import Session
 from app.database import get_db, engine
 
 from sqlalchemy import func
-from app.models import Category, Content, History, content_categories
+from app.models.category_model import Category
+from app.models.content_model import Content
+from app.models.watch_history import History
+from app.models.content_category import content_categories
 
 from app.schemas.category_schema import * 
 
@@ -53,18 +56,13 @@ def get_categories(
 
     return categories
 
-
-@router.get("/recommendations/{user_id}")
+@router.get("/recommendations/{user_id}", response_model=list[CategoryOut])
 def get_recommendations(
     user_id: int,
     db: Session = Depends(get_db)
 ):
     result = (
-        db.query(
-            Category.id,
-            Category.name,
-            func.count(Category.id).label("views")
-        )
+        db.query(Category)
         .join(content_categories, Category.id == content_categories.c.category_id)
         .join(Content, Content.id == content_categories.c.content_id)
         .join(History, History.content_id == Content.id)

@@ -21,6 +21,7 @@ class Content(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     is_active = Column(Boolean, default=True)
 
+
     categories = relationship("Category", secondary=content_categories, back_populates="contents")
 
     watch_history = relationship("History", back_populates="content")

@@ -12,12 +12,10 @@ class WatchHistoryUpdateProgress(BaseModel):
     progress: Optional[int] = None
 
 class WatchHistoryOut(WatchHistoryCreate):
-    id: int
     user_id: int
     content_id: int
-    watched_at:datetime
-    content: ContentPreview
+    watched_at: datetime
+    content: Optional[ContentPreview] = None
+
     class Config:
         from_attributes = True
-
-
