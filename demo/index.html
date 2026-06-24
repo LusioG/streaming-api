@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamPlay - Tu Plataforma de Streaming</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- BACKGROUND GLOWS -->
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <!-- MAIN CONTAINER -->
+    <div id="app">
+        <!-- HEADER / NAVIGATION -->
+        <header class="main-header hidden" id="mainHeader">
+            <div class="logo">
+                <i class="fa-solid fa-play-circle text-gradient-icon"></i>
+                <span class="logo-text">Stream<span class="red-highlight">Play</span></span>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="nav-item active" data-target="catalogSection"><i class="fa-solid fa-house"></i> Inicio</a>
+                <a href="#" class="nav-item" data-target="historySection"><i class="fa-solid fa-history"></i> Mi Historial</a>
+            </nav>
+            <div class="user-menu">
+                <span id="headerUsername" class="username-display">Usuario</span>
+                <button id="logoutBtn" class="btn btn-secondary btn-icon-only" title="Cerrar Sesión">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- AUTHENTICATION CONTAINER (LOGIN / REGISTER) -->
+        <div id="authSection" class="auth-container">
+            <div class="auth-card">
+                <div class="auth-logo">
+                    <i class="fa-solid fa-play-circle text-gradient-icon"></i>
+                    <h2>Stream<span>Play</span></h2>
+                </div>
+                
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tabLoginBtn">Iniciar Sesión</button>
+                    <button class="auth-tab" id="tabRegisterBtn">Registrarse</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginEmail"><i class="fa-solid fa-envelope"></i> Correo Electrónico</label>
+                        <input type="email" id="loginEmail" placeholder="correo@ejemplo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword"><i class="fa-solid fa-lock"></i> Contraseña</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                    <p class="auth-hint">Prueba con <strong>test@streaming.com</strong> y contraseña <strong>admin123</strong></p>
+                </form>
+
+                <!-- Register Form -->
+                <form id="registerForm" class="auth-form hidden">
+                    <div class="form-group">
+                        <label for="regUsername"><i class="fa-solid fa-user"></i> Nombre de Usuario</label>
+                        <input type="text" id="regUsername" placeholder="luchodev" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail"><i class="fa-solid fa-envelope"></i> Correo Electrónico</label>
+                        <input type="email" id="regEmail" placeholder="correo@ejemplo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword"><i class="fa-solid fa-lock"></i> Contraseña</label>
+                        <input type="password" id="regPassword" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+                </form>
+                
+                <div id="authMessage" class="alert hidden"></div>
+            </div>
+        </div>
+
+        <!-- MAIN DASHBOARD CONTENT -->
+        <main id="mainContent" class="hidden">
+            
+            <!-- SECTION 1: CATALOG & HERO -->
+            <section id="catalogSection" class="dashboard-section active-section">
+                <!-- HERO BANNER -->
+                <div id="heroBanner" class="hero-banner">
+                    <div class="hero-content">
+                        <span class="hero-badge">Destacado</span>
+                        <h1 id="heroTitle">Cargando película...</h1>
+                        <p id="heroDescription">Cargando descripción detallada...</p>
+                        <div class="hero-actions">
+                            <button id="heroPlayBtn" class="btn btn-primary"><i class="fa-solid fa-play"></i> Reproducir</button>
+                            <button id="heroInfoBtn" class="btn btn-secondary"><i class="fa-solid fa-circle-info"></i> Más Información</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTROLS ROW (Search & Category filters) -->
+                <div class="catalog-controls">
+                    <div class="search-bar-container">
+                        <input type="text" id="searchInput" placeholder="Buscar películas o series...">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    </div>
+                    
+                    <div class="sort-container">
+                        <label for="sortSelect">Ordenar por:</label>
+                        <select id="sortSelect" class="form-select">
+                            <option value="name">Nombre</option>
+                            <option value="release_year">Año de Estreno</option>
+                            <option value="duration_minutes">Duración</option>
+                        </select>
+                        <button id="sortOrderBtn" class="btn btn-secondary btn-icon-only" title="Cambiar orden">
+                            <i class="fa-solid fa-arrow-down-a-z"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CATEGORIES ROW -->
+                <div class="category-filters-container">
+                    <h3>Categorías</h3>
+                    <div class="category-chips" id="categoryChips">
+                        <button class="chip active" data-category-id="all">Todas</button>
+                        <!-- Chips dynamically loaded -->
+                    </div>
+                </div>
+
+                <!-- RECOMMENDATIONS SECTION (Only visible if user has watch history) -->
+                <div id="recommendationsContainer" class="movies-row-container hidden">
+                    <div class="row-header">
+                        <h2>Recomendaciones para ti</h2>
+                        <span class="row-subtitle">Basado en tus géneros favoritos</span>
+                    </div>
+                    <div class="movies-grid" id="recommendationsGrid">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- MAIN MOVIES GRID -->
+                <div class="movies-row-container">
+                    <div class="row-header">
+                        <h2>Catálogo de Contenido</h2>
+                    </div>
+                    <div class="movies-grid" id="catalogGrid">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: WATCH HISTORY -->
+            <section id="historySection" class="dashboard-section hidden">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-history"></i> Mi Historial de Reproducción</h2>
+                    <p>Contenidos que has visto y su progreso de reproducción</p>
+                </div>
+                <div class="history-list-container" id="historyList">
+                    <!-- History cards loaded dynamically -->
+                </div>
+            </section>
+
+
+        </main>
+
+        <!-- CONFIGURATION FOOTER (Set API URL) -->
+        <footer class="settings-footer">
+            <div class="api-config-container">
+                <label for="apiUrlInput"><i class="fa-solid fa-server"></i> API URL:</label>
+                <input type="text" id="apiUrlInput" value="http://127.0.0.1:8000">
+                <button id="saveApiUrlBtn" class="btn btn-secondary btn-small">Aplicar</button>
+                <span id="apiStatusIndicator" class="api-status offline"><i class="fa-solid fa-circle"></i> Desconectada</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODAL: CONTENT DETAILS -->
+    <div id="detailModal" class="modal-backdrop hidden">
+        <div class="modal-container">
+            <button class="modal-close" id="closeDetailModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-banner" id="modalBanner" style="background-image: url('')">
+                <div class="modal-banner-overlay"></div>
+                <div class="modal-banner-content">
+                    <h2 id="modalTitle">Título Película</h2>
+                    <p class="modal-meta">
+                        <span id="modalYear">2024</span> &bull; 
+                        <span id="modalDuration">120 min</span>
+                    </p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-main-info">
+                    <h3>Sinopsis</h3>
+                    <p id="modalDescription">Descripción de la película...</p>
+                    <div class="modal-categories" id="modalCategories">
+                        <!-- Chips de categoría -->
+                    </div>
+                </div>
+                <div class="modal-actions-panel">
+                    <button id="modalPlayBtn" class="btn btn-primary btn-block"><i class="fa-solid fa-play"></i> Ver Ahora</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: SIMULATED VIDEO PLAYER -->
+    <div id="playerModal" class="modal-backdrop hidden player-backdrop">
+        <div class="player-container">
+            <button class="modal-close player-close" id="closePlayerModalBtn"><i class="fa-solid fa-arrow-left"></i> Volver</button>
+            
+            <div class="simulated-screen">
+                <div class="player-glow"></div>
+                <div class="player-message">
+                    <i class="fa-solid fa-play-circle-o blink"></i>
+                    <h2 id="playerContentTitle">Reproduciendo: Película</h2>
+                    <p>Simulando reproducción y guardando progreso...</p>
+                </div>
+            </div>
+            
+            <!-- Video Controls -->
+            <div class="player-controls">
+                <button id="playerPlayPauseBtn" class="btn-player-control"><i class="fa-solid fa-pause"></i></button>
+                <div class="progress-bar-container">
+                    <span id="playerCurrentTime" class="time-label">0:00</span>
+                    <div class="progress-track" id="playerProgressTrack">
+                        <div class="progress-fill" id="playerProgressFill"></div>
+                    </div>
+                    <span id="playerTotalTime" class="time-label">0:00</span>
+                </div>
+                <div class="player-speed">
+                    <i class="fa-solid fa-rotate-right spinner"></i> Sincronizando
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Script -->
+    <script src="app.js"></script>
+</body>
+</html>

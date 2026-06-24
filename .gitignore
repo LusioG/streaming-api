@@ -23,6 +23,11 @@ env/
 
 # Base de datos local
 *.sqlite3
+*.db
+streaming.db
+
+# Secretos y Entorno
+.env
 
 # Coverage reports
 htmlcov/

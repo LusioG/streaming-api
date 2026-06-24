@@ -73,7 +73,7 @@ def update_user(
 
     # manejar password aparte
     if "password" in update_data:
-        update_data["password"] = hash_password(update_data["password"])
+        update_data["password_hash"] = hash_password(update_data.pop("password"))
 
     for k, v in update_data.items():
         setattr(user, k, v)
